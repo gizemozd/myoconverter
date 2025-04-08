@@ -40,7 +40,7 @@ def convert(xml_file, output_folder, **kwargs):
   logger.info(f"Commencing the conversion procedure!")
 
   # Parse ground. The ground may have attached geometries and wrapping objects
-  _parse_ground()
+  # _parse_ground()
 
   # Parse constraints. The constraints need to be parsed before joints, because we might need to update the polycoefs
   # of some joint constraints when parsing joints
@@ -93,6 +93,8 @@ def _add_bodies_and_joints(parent_name, current_body, root_body=False):
   # we'll need to cut them by checking whether they are socket_parent_frames or socket_child_frames
   socket_parent = cfg.O_JOINTSET.xpath(f".//socket_parent[text()='{parent_name}']")
 
+  parent_name_prev = parent_name
+  # Loop through all socket parents
   for s in socket_parent:
 
     # Get parent until WeldJoint, CustomJoint, etc
@@ -127,7 +129,11 @@ def _add_bodies_and_joints(parent_name, current_body, root_body=False):
 
     # Move to next joint
     parent_name = socket_child_frame.find('socket_parent').text
-    _add_bodies_and_joints(parent_name, next_body)
+
+    # Check if the parent name is the same as the previous one
+    if parent_name != parent_name_prev:
+      logger.warning(f"Parent name changed from {parent_name_prev} to {parent_name}")
+      _add_bodies_and_joints(parent_name, next_body)
 
 def _parse_ground():
   """ Parse OpenSim `Ground`.
