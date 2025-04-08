@@ -34,8 +34,9 @@ def parse_coordinates(objects):
     coordinates[coordinate.attrib["name"]] = {
       "name": coordinate.attrib["name"],
       "range": str2vec(coordinate.find("range").text),
-      "limited": str2bool(coordinate.find("clamped").text),
-      "_locked": str2bool(coordinate.find("locked").text)}
+      "limited": str2bool(coordinate.find("clamped").text) if coordinate.find("clamped") is not None else False,
+      "_locked": str2bool(coordinate.find("locked").text) if coordinate.find("locked") is not None else False,
+    }
     if default_value is not None:
       coordinates[coordinate.attrib["name"]].update({"user": float(default_value.text),
                                                      "_transform_value": float(default_value.text)})
@@ -73,7 +74,7 @@ def estimate_axis(socket_child_frame, axis):
   """
 
   # Get orientation of child frame
-  child_orientation = str2vec(socket_child_frame.find("orientation").text)
+  child_orientation = str2vec(socket_child_frame.find("orientation").text) if socket_child_frame.find("orientation") is not None else [0, 0, 0]
 
   # Turn into a rotation
   child_rotation = Rotation.from_euler("XYZ", child_orientation)
