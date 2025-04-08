@@ -33,8 +33,6 @@ class Body(IParser):
     parent_orientation = str2vec(socket_parent_frame.find("orientation").text)
 
     # Translate/rotate body position if needed
-    # from IPython import embed
-    # embed()
     try:
       child_position = str2vec(socket_child_frame.find("translation").text)
     except AttributeError:
