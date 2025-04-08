@@ -6,6 +6,7 @@
 from lxml import etree
 import os
 from scipy.spatial.transform import Rotation
+from loguru import logger
 
 from myoconverter.xml.parsers import IParser
 from myoconverter.xml import config as cfg
@@ -32,9 +33,22 @@ class Body(IParser):
     parent_orientation = str2vec(socket_parent_frame.find("orientation").text)
 
     # Translate/rotate body position if needed
-    child_position = str2vec(socket_child_frame.find("translation").text)
+    # from IPython import embed
+    # embed()
+    try:
+      child_position = str2vec(socket_child_frame.find("translation").text)
+    except AttributeError:
+      logger.warning(f"Child translation not found for {xml.attrib['name']}. Using default value.")
+      # If there is no translation, use default value
+      child_position = [0, 0, 0]
+
     parent_position -= child_position
-    child_orientation = str2vec(socket_child_frame.find("orientation").text)
+    try:
+      child_orientation = str2vec(socket_child_frame.find("orientation").text)
+    except AttributeError:
+      logger.warning(f"Child orientation not found for {xml.attrib['name']}. Using default value.")
+      # If there is no orientation, use default value
+      child_orientation = [0, 0, 0]
     child_rotation = Rotation.from_euler("XYZ", child_orientation)
     parent_orientation = (child_rotation.inv() * Rotation.from_euler("XYZ", parent_orientation)).as_euler("XYZ")
 
