@@ -5,6 +5,7 @@
 
 import numpy as np
 import os
+from pathlib import Path
 import trimesh
 import pyvista
 from shutil import copyfile
@@ -36,12 +37,15 @@ def copy_mesh_file(mesh_file, geometry_folder, output_geometry_folder):
   :return: Name of mesh, filename of converted stl mesh file
   :raises NotImplementedError: if given mesh file is not vtk or stl
   """
-  mesh_name = mesh_file[:-4]
+  # Get the suffix
+  extension = Path(mesh_file).suffix
+  mesh_name = Path(mesh_file).stem
+
   stl_filename = mesh_name + ".stl"
   stl_filepath = os.path.join(output_geometry_folder, stl_filename)
 
   # Transform a vtk file into an stl file and repair the mesh
-  if mesh_file[-3:] == "vtp":
+  if extension == ".vtp":
 
     # Read the vtp file with pyvista
     pymesh = pyvista.read(os.path.join(geometry_folder, mesh_file))
@@ -60,7 +64,7 @@ def copy_mesh_file(mesh_file, geometry_folder, output_geometry_folder):
     tmesh.export(stl_filepath)
 
   # Just copy the stl file
-  elif mesh_file[-3:] == "stl":
+  elif extension == ".stl":
     copyfile(os.path.join(geometry_folder, mesh_file), stl_filepath)
 
   else:
