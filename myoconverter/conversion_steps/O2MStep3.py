@@ -307,9 +307,9 @@ class MuscleForceOpt:
                 # ensure this.
 
                 optParam_lb = [0.01, 1,\
-                               0.01, 0.5]  # lower bounds of lmin, lmax, fpmax, fmax
+                               0.01, 0.1]  # lower bounds of lmin, lmax, fpmax, fmax
                 optParam_ub = [1, 1.99,\
-                               5, 2]  # upper bounds of lmin, lmax, fpmax, fmax
+                               5, 2.]  # upper bounds of lmin, lmax, fpmax, fmax
                 
                 opt_results, self.mjc_model = fmOptPSO_cust(cvt3_model_path, muscle, joints_uniq,\
                                                        mjc_jnt_arr, act_arr, osimFP,\

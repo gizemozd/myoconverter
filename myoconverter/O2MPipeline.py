@@ -14,7 +14,7 @@ from loguru import logger
 from myoconverter.conversion_steps.O2MSteps import O2MSteps
 import pickle
 import os
-
+import time
 def O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs):
     """
     :param osim_file: Path to the OpenSim OSIM model file
@@ -40,7 +40,8 @@ def O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs):
 
     # set logging
     MODEL_NAME = os.path.split(osim_file)[1][:-5]
-    OUTPUT_LOG_FILE = os.path.join(output_folder, f"{MODEL_NAME}_conversion.log")
+    t = time.strftime("%H%M%S")
+    OUTPUT_LOG_FILE = os.path.join(output_folder, f"{MODEL_NAME}_conversion_{t}.log")
 
     # If there is an existing log file, remove it
     if os.path.exists(OUTPUT_LOG_FILE):

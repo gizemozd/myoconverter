@@ -8,6 +8,8 @@ Created on Tue Jul 27 23:19:13 2021
 @author: hwang
 
 """
+import sys
+sys.path.append('D:\Ponyo\myoconverter')
 from myoconverter.O2MPipeline import O2MPipeline
 
 # define pipline configurations
@@ -27,5 +29,5 @@ kwargs['treat_as_normal_path_point'] = False      # Using constraints to represe
 osim_file = './myoconverter/tests/resource/model_unit_test/osim/Arm26/arm26.osim'
 geometry_folder = './myoconverter/tests/resource/model_unit_test/osim/Arm26/Geometry'
 output_folder = './myoconverter/tests/resource/model_unit_test/mjc/Arm26'
-
-O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
+if __name__ == '__main__':    
+    O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)

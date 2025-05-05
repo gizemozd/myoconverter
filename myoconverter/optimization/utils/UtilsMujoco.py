@@ -53,7 +53,7 @@ def calculateEndPoints_mjc(mjc_model_path, end_points, n_eval):
 
         # set up simulations
     mjc_data = mujoco.MjData(mjc_model)
-    mjc_model.opt.timestep = 0.001 ## same time step as opensim
+    mjc_model.opt.timestep = 0.00001 ## same time step as opensim
     
     # extract independed joint names and ranges
     ang_ranges, free_jnt_id = getCoordinateRange_mjc(mjc_model)
@@ -353,7 +353,7 @@ def computeMomentArmMuscleJoints(mjc_model, muscle, joints, ang_ranges, evalN):
         joints = [joints]
     
     mjc_data = mujoco.MjData(mjc_model)
-    mjc_model.opt.timestep = 0.001 ## same time step as opensim
+    mjc_model.opt.timestep = 0.00001 ## same time step as opensim
     
     muscles_idx = mujoco.mj_name2id(mjc_model, mujoco.mjtObj.mjOBJ_ACTUATOR, muscle)  # muscle index
         
@@ -554,7 +554,7 @@ def getMuscleForceLengthCurvesSim(mjc_model, muscle, joints, jnt_arr, act_arr):
     # mjc_model.actuator_dyntype[muscle_id] = 0 # no activation dynamics
     
     mjc_data = mujoco.MjData(mjc_model)
-    mjc_model.opt.timestep = 0.005 ## same time step as opensim
+    mjc_model.opt.timestep = 0.00001 ## same time step as opensim
 
     for ia, act in enumerate(act_arr):
         mjc_data.ctrl[muscle_id] = act    # set control signal to 1

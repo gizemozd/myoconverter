@@ -40,7 +40,7 @@ def convert(xml_file, output_folder, **kwargs):
   logger.info(f"Commencing the conversion procedure!")
 
   # Parse ground. The ground may have attached geometries and wrapping objects
-  # _parse_ground()
+  _parse_ground()
 
   # Parse constraints. The constraints need to be parsed before joints, because we might need to update the polycoefs
   # of some joint constraints when parsing joints
@@ -112,7 +112,10 @@ def _add_bodies_and_joints(parent_name, current_body, root_body=False):
 
     # Find child body of joint
     child_body = find_element_by_name(cfg.OPENSIM, split_name(socket_child_frame.find("socket_parent").text))
-
+    child_name = child_body.get('name')
+    temp = cfg.MUJOCO.findall(f".//*[@name='{child_name}']")
+    if len(temp)>0:
+        continue
     # Parse body
     next_body = cfg.BODY_PARSER.parse(child_body,
                                       socket_parent_frame=socket_parent_frame,
